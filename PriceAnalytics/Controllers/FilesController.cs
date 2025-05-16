@@ -20,7 +20,10 @@ namespace PriceAnalytics.Controllers
         public async Task<IActionResult> UploadOrderFile(IFormFile file)
         {
             IActionResult result = BadRequest("There is no file or file is incorrect!");
-
+#if TEST
+            Thread.Sleep(2000);
+            return Ok("Order");
+#endif
             if (file != null || file?.Length == 0)
             {
                 try
@@ -48,7 +51,10 @@ namespace PriceAnalytics.Controllers
         public async Task<IActionResult> UploadPricesFile(IFormFile file)
         {
             IActionResult result = BadRequest("There is no file or file is incorrect!");
-
+#if TEST
+            Thread.Sleep(2000);
+            return Ok("Prices");
+#endif
             if (file != null || file?.Length == 0)
             {
                 try
