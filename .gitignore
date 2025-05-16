@@ -1,0 +1,72 @@
+# ========== .NET ==========
+
+# Build results
+bin/
+obj/
+out/
+*.dll
+*.exe
+*.pdb
+*.cache
+*.log
+
+# User-specific files
+*.user
+*.suo
+*.vs/
+.vscode/
+
+# Rider
+.idea/
+*.sln.iml
+
+# ASP.NET secrets
+secrets.json
+
+# ========== Node.js / Vue.js ==========
+
+# Node modules
+**/node_modules/
+**/dist/
+**/build/
+
+# Environment files
+*.env
+*.env.*.local
+
+# NPM logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ========== SQLite ==========
+
+*.db
+*.db-journal
+*.sqlite
+*.sqlite3
+
+# Если хочешь быть точным (дополнительно к верхнему варианту):
+# PriceAnalytics/PriceAnalytics/app.db
+
+# ========== OS / General ==========
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Linux
+*~
+
+# Logs
+*.log
+
+# ========== Git ==========
+
+# Git directory config (если ты в подмодулях не работаешь)
+.gitmodules
