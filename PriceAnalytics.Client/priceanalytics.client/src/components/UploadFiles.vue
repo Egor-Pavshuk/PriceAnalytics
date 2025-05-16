@@ -2,10 +2,14 @@
 import { ref } from 'vue';
 import { HideOverlay } from '../stores/UploadOverlayStore';
 import { IsOverlayVisible } from '../stores/UploadOverlayStore';
+import RotateLoader from './RotateLoader.vue';
+import Checkmark from '../assets/Checkmark.svg';
 
 const PRICES = "prices";
 const UPLOADURL = "https://localhost:7260/api/files/upload/";
 const selectedInput = ref(PRICES);
+const isLoading = ref(false);
+const showCheckmark = ref(false);
 let uploadFile = null;
 
 function ChangeInput(inputName)
@@ -23,6 +27,7 @@ async function UploadFile()
 {
   if(uploadFile)
   {
+    isLoading.value = true;
     const formData = new FormData();
     let uploadURL = UPLOADURL;
 
@@ -42,7 +47,18 @@ async function UploadFile()
       body: formData,
     });
 
-    console.log(response.status);
+    isLoading.value = false;
+    if(response.ok)
+    {
+      showCheckmark.value = true;
+      setTimeout(() => {
+        showCheckmark.value = false;
+      }, 2000);
+    }
+    else
+    {
+      alert("Error: " + await response.text());
+    }
   }
 }
 
@@ -65,7 +81,15 @@ async function UploadFile()
         <input type="file" class="drop-input" v-if="selectedInput === 'prices'" @change="HandleChange"/>
         <input type="file" class="drop-input" v-if="selectedInput === 'order'" @change="HandleChange"/>
       </div>
-      <button class="btn upload-btn" @click="UploadFile">Upload</button>
+      <Transition name="fade">
+        <button class="btn upload-btn" @click="UploadFile" v-if="!isLoading && !showCheckmark">Upload</button>
+      </Transition>
+      <Transition name="fade">
+        <RotateLoader :loading = isLoading class="loader"/>
+      </Transition>
+      <Transition name="fade">
+        <img :src="Checkmark" alt="Success" class="check" v-if="showCheckmark" />
+      </Transition>
     </div>
   </div>
 </template>
@@ -118,12 +142,11 @@ h3 {
   transition: background 0.2s ease;
 }
 
-.btn:hover
-{
+.btn:hover{
   background-color: #ddd;
 }
 
-.btn.active {
+.btn.active{
   background-color: #a2c7ea;
   color: white;
 }
@@ -152,6 +175,29 @@ h3 {
   bottom: 10px;
   right: 15px;
   border-radius: 3px 3px 3px 3px;
+}
+
+.loader{
+  position: absolute;
+  bottom: 20px;
+  right: 40px;
+}
+
+.check{
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  bottom: 15px;
+  right: 30px;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s ease;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 
 </style>
