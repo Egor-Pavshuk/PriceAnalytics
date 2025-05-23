@@ -1,7 +1,8 @@
 <script setup>
 import { ref } from 'vue';
 
-const selectedMode = ref('singleMode')
+const singleMode = 'singleMode';
+const selectedMode = ref(singleMode)
 const selectedDate = ref(formatDate(new Date()))
 const selectedStartDate = ref(formatDate(new Date()))
 const selectedEndDate = ref(formatDate(new Date()))
@@ -77,6 +78,17 @@ async function endDateChanged()
   await rangeDateChanged();
 }
 
+async function modeChanged() {
+  if(selectedMode.value === singleMode)
+  {
+    await singleDateChanged();
+  }
+  else
+  {
+    await rangeDateChanged();
+  }
+}
+
 </script>
 
 <template>
@@ -85,11 +97,11 @@ async function endDateChanged()
       <h3 class="filter-title">Choose date mode</h3>
       <div class="radio-group">
         <label class="radio-option">
-          <input type="radio" value="singleMode" v-model="selectedMode" />
+          <input type="radio" value="singleMode" v-model="selectedMode" @change="modeChanged"/>
           Single date mode
         </label>
         <label class="radio-option">
-          <input type="radio" value="rangeMode" v-model="selectedMode" />
+          <input type="radio" value="rangeMode" v-model="selectedMode" @change="modeChanged"/>
           Range date mode
         </label>
       </div>
