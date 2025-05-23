@@ -9,14 +9,14 @@ const { pricesData, ordersData } = defineProps(
 
   function getMatchingColor(row)
   {
-    const { date, hour, price, offeredVolume } = row;
+    const { date, hour, price, offeredVolume, applicationType } = row;
     var resultColor = 'transparent';
 
     if (ordersData && Array.isArray(ordersData))
     {
       for(const order of ordersData)
       {
-        if(order.date === date)
+        if(order.date === date && order.applicationType === applicationType)
         {
           for(const rowData of order.rows || [])
           {
