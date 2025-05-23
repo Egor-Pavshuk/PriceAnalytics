@@ -1,7 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using PriceAnalytics.Core.DbModels;
 using PriceAnalytics.Core.Interfaces;
-using System.Linq;
 
 namespace PriceAnalytics.Controllers
 {
