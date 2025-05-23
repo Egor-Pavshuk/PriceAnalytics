@@ -6,5 +6,6 @@ namespace PriceAnalytics.Core.BllModels
     {
         public DateOnly Date { get; set; }
         public List<RowDataBll> Rows { get; set; } = [];
+        public string ApplicationType { get; set; } = string.Empty;
     }
 }

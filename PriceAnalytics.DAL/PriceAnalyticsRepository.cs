@@ -151,6 +151,7 @@ namespace PriceAnalytics.DAL
                     .Select(s => new SaleApplicationBll
                     {
                         Date = s.Date,
+                        ApplicationType = s.ApplicationType,
                         Rows = s.Rows.Select(r => new RowDataBll
                         {
                             Hours = r.Hours.Select(h => new HourDataBll
@@ -181,6 +182,7 @@ namespace PriceAnalytics.DAL
                     .Select(s => new SaleApplicationBll
                     {
                         Date = s.Date,
+                        ApplicationType = s.ApplicationType,
                         Rows = s.Rows.Select(r => new RowDataBll
                         {
                             Hours = r.Hours.Select(h => new HourDataBll

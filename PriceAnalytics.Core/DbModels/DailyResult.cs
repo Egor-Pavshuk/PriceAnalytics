@@ -15,5 +15,6 @@ namespace PriceAnalytics.Core.DbModels
         public decimal OfferedVolume { get; set; }
         public decimal AcceptedVolume { get; set; }
         public string ApplicationType { get; set; } = string.Empty;
+        public string Color { get; set; } = string.Empty;
     }
 }
