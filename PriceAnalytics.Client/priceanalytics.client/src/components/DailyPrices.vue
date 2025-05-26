@@ -58,8 +58,8 @@ const { pricesData, ordersData } = defineProps(
               </tr>
            </thead>
             <tbody>
-              <tr v-for="(row, index) in pricesData" :key="index" :style="{ backgroundColor : getMatchingColor(row) }">
-                <td v-for="(cell, index) in row" :key="index">{{ cell }}</td>
+              <tr v-for="(row, index) in pricesData" :key="index" :style="{ backgroundColor : row.color ? row.color : getMatchingColor(row) }">
+                <td v-for="(value, index) in Object.values(row).slice(0, Object.values(row).length - 1)">{{ value }}</td>
               </tr>
             </tbody>
           </table>
