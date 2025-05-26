@@ -4,18 +4,18 @@ using PriceAnalytics.Core.DbModels;
 using PriceAnalytics.Core.Enums;
 using PriceAnalytics.Core.Interfaces;
 using PriceAnalytics.Core.OperationStatuses;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace PriceAnalytics.Bll
 {
     public class PriceAnalyticsService : IPriceAnalyticsService
     {
+        private const string SELL = "sell";
+        private const string INCORRECTSELL = "Продаж";
+        private const string BUY = "buy";
+        private const string INCORRECTBUY = "Купівля";
+        private readonly Dictionary<string, string> ApplicationTypes = new() { { INCORRECTSELL, SELL }, { INCORRECTBUY, BUY } };
         private readonly IPriceAnalyticsRepository _repository;
+
         public PriceAnalyticsService(IPriceAnalyticsRepository repository)
         {
             _repository = repository;
@@ -74,6 +74,13 @@ namespace PriceAnalytics.Bll
                     await package.LoadAsync(fileStream);
                     var worcksheet = package.Workbook.Worksheets[0];
                     var dateCell = worcksheet.Cells[1, 6];
+                    var applicationTypeCell = worcksheet.Cells[2, 6];
+
+                    if (ApplicationTypes.TryGetValue(applicationTypeCell.Text, out string? type))
+                    {
+                        saleApplication.ApplicationType = type;
+                    }
+
                     if (dateCell.Value is string value && dateCell.Style.Numberformat.Format.Contains("yy"))
                     {
                         saleApplication.Date = DateOnly.FromDateTime(DateTime.Parse(value));
@@ -95,8 +102,6 @@ namespace PriceAnalytics.Bll
 
                             firstRowData.Hours.Add(hourData);
                         }
-
-                        
                     }
 
                     rowsData.Add(firstRowData);
