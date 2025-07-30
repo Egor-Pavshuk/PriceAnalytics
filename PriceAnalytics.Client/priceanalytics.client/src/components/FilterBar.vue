@@ -204,4 +204,8 @@ input[type="date"]
   gap: 20px;
 }
 
+input[type="radio"] {
+  accent-color: #5783b1;
+}
+
 </style>

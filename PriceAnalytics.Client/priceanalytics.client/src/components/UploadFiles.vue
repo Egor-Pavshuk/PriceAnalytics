@@ -4,12 +4,14 @@ import { HideOverlay } from '../stores/UploadOverlayStore';
 import { IsOverlayVisible } from '../stores/UploadOverlayStore';
 import RotateLoader from './RotateLoader.vue';
 import Checkmark from '../assets/Checkmark.svg';
+import Cross from '../assets/Cross.svg';
 
 const PRICES = "prices";
 const UPLOADURL = "https://localhost:7260/api/files/upload/";
 const selectedInput = ref(PRICES);
 const isLoading = ref(false);
 const showCheckmark = ref(false);
+const showCross = ref(false);
 let uploadFile = null;
 
 function ChangeInput(inputName)
@@ -45,6 +47,13 @@ async function UploadFile()
     {
       method : 'POST',
       body: formData,
+    }).catch(() =>
+    {
+      isLoading.value = false;
+      showCross.value = true;
+      setTimeout(() => {
+        showCross.value = false;
+      }, 2000)
     });
 
     isLoading.value = false;
@@ -82,13 +91,16 @@ async function UploadFile()
         <input type="file" class="drop-input" v-if="selectedInput === 'order'" @change="HandleChange"/>
       </div>
       <Transition name="fade">
-        <button class="btn upload-btn" @click="UploadFile" v-if="!isLoading && !showCheckmark">Upload</button>
+        <button class="btn upload-btn" @click="UploadFile" v-if="!isLoading && !showCheckmark && !showCross">Upload</button>
       </Transition>
       <Transition name="fade">
         <RotateLoader :loading = isLoading class="loader"/>
       </Transition>
       <Transition name="fade">
         <img :src="Checkmark" alt="Success" class="check" v-if="showCheckmark" />
+      </Transition>
+      <Transition name="fade">
+        <img :src="Cross" alt="Faild" class="check" v-if="showCross" />
       </Transition>
     </div>
   </div>
