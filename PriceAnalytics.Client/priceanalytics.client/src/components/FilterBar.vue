@@ -7,7 +7,7 @@ const selectedDate = ref(formatDate(new Date()))
 const selectedStartDate = ref(formatDate(new Date()))
 const selectedEndDate = ref(formatDate(new Date()))
 
-const emitMethods = defineEmits(['update-prices', 'update-orders']);
+const emitMethods = defineEmits(['update-prices', 'update-orders', 'update-loading']);
 
 singleDateChanged();
 
@@ -18,44 +18,52 @@ function formatDate(date)
 
 async function singleDateChanged()
 {
+  emitMethods('update-loading', false);
+  emitMethods('update-loading', true);
+
   const pricesResponse = await fetch("https://localhost:7260/api/filters/prices/by-single-date?date=" + selectedDate.value,
     {
       method : 'GET'
     }
-  );
+  ).catch(() => { emitMethods('update-loading', false) });
 
     const ordersResponse = await fetch("https://localhost:7260/api/filters/orders/by-single-date?date=" + selectedDate.value,
     {
       method : 'GET'
     }
-  );
+  ).catch(() => { emitMethods('update-loading', false) });
 
   var pricesData = await pricesResponse.json();
   var ordersData = await ordersResponse.json();
 
   emitMethods('update-orders', ordersData);
   emitMethods('update-prices', pricesData);
+  emitMethods('update-loading', false);
 }
 
 async function rangeDateChanged()
 {
+  emitMethods('update-loading', false);
+  emitMethods('update-loading', true);
+
   const pricesResponse = await fetch("https://localhost:7260/api/filters/prices/by-date-range?startDate=" + selectedStartDate.value + "&endDate=" + selectedEndDate.value,
     {
       method : 'GET'
     }
-  );
+  ).catch(() => { emitMethods('update-loading', false) });
 
   const ordersResponse = await fetch("https://localhost:7260/api/filters/orders/by-date-range?startDate=" + selectedStartDate.value + "&endDate=" + selectedEndDate.value,
     {
       method : 'GET'
     }
-  );
+  ).catch(() => { emitMethods('update-loading', false) });
 
   var pricesData = await pricesResponse.json();
   var ordersData = await ordersResponse.json();
 
   emitMethods('update-orders', ordersData);
   emitMethods('update-prices', pricesData);
+  emitMethods('update-loading', false);
 }
 
 async function startDateChanged()
