@@ -1,4 +1,5 @@
 <script setup>
+
 const { pricesData, ordersData } = defineProps(
   {
     pricesData: Array,
@@ -91,7 +92,7 @@ const { pricesData, ordersData } = defineProps(
 }
 
 .table-block{
-  width: 100%;
+  width: 95%;
   display: flex;
   align-items: center;
   flex-direction: column;

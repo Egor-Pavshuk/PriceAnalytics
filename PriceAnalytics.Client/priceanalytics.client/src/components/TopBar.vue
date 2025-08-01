@@ -1,12 +1,24 @@
 <script setup>
 import { ShowOverlay } from '../stores/UploadOverlayStore';
 
+const emitMethods = defineEmits(['update-selected'])
+
+defineProps(
+{
+  dailyPricesSelected: Boolean
+})
+
+function ChangeSelection(value)
+{
+  emitMethods('update-selected', value)
+}
+
 </script>
 
 <template>
     <div class="top-bar">
-        <button class="top-btn">Show order prices</button>
-        <button class="top-btn">Show daily prices</button>
+        <button class="top-btn" :disabled= "!dailyPricesSelected" @click="ChangeSelection(false)">Order prices</button>
+        <button class="top-btn" :disabled= "dailyPricesSelected" @click="ChangeSelection(true)">Daily prices</button>
         <button class="top-btn" @click="ShowOverlay">
           Upload files
         </button>
@@ -17,12 +29,12 @@ import { ShowOverlay } from '../stores/UploadOverlayStore';
 </template>
 
 <style scoped>
-.top-bar 
+.top-bar
 {
   display: flex;
   align-items: center;
-  justify-content: flex-start; 
-  gap: 16px; 
+  justify-content: flex-start;
+  gap: 16px;
   padding: 12px;
   background-color: rgba(255, 255, 255, 0.3);
   border-bottom: 1px solid #a2c7ea;
@@ -37,7 +49,7 @@ import { ShowOverlay } from '../stores/UploadOverlayStore';
   -webkit-backdrop-filter: blur(8px);
 }
 
-.top-btn 
+.top-btn
 {
   padding: 8px 16px;
   border: none;
@@ -48,9 +60,15 @@ import { ShowOverlay } from '../stores/UploadOverlayStore';
   transition: background 0.2s ease;
 }
 
-.top-btn:hover 
+.top-btn:hover
 {
   background-color: #ddd;
+}
+
+.top-btn:disabled
+{
+  background-color: rgba(255, 255, 255, 0.6);
+  cursor: default;
 }
 
 .user-icon
@@ -74,7 +92,7 @@ import { ShowOverlay } from '../stores/UploadOverlayStore';
   transition: background 0.2s ease;
 }
 
-.user-btn:hover 
+.user-btn:hover
 {
   background-color: #ddd;
 }

@@ -2,13 +2,15 @@
 import TopBar from './components/TopBar.vue'
 import FilterBar from './components/FilterBar.vue'
 import DailyPrices from './components/DailyPrices.vue'
+import Orders from './components/Orders.vue'
 import UploadFiles from './components/UploadFiles.vue'
 import RotateLoader from './components/RotateLoader.vue'
 import { ref } from 'vue'
 
 const dailyPrices = ref([]);
 const orders = ref([]);
-const isLoadingActive = ref(false)
+const isLoadingActive = ref(false);
+const isDailyPricesSelected = ref(true);
 
 function updatePrices(newPrices)
 {
@@ -20,22 +22,46 @@ function updateOrders(newOrders)
   orders.value = newOrders;
 }
 
+function switchPage(value)
+{
+  isLoadingActive.value = true;
+  isDailyPricesSelected.value = null;
+
+  setTimeout(() => {
+    isDailyPricesSelected.value = value;
+  }, 80)
+}
+
 </script>
 
 <template>
   <div class="back">
     <img class="logo" src="./assets/TopPolygon.svg" />
   </div>
-    <TopBar />
+    <TopBar :dailyPricesSelected = "isDailyPricesSelected"
+            @update-selected="switchPage"/>
 
     <Transition name="fade">
       <div v-if="isLoadingActive" class="loader-wrapper">
-        <RotateLoader :loading = true class="loader"/>
+        <RotateLoader :loading = "true" class="loader"/>
       </div>
     </Transition>
 
-    <FilterBar @update-prices="updatePrices" @update-orders="updateOrders" @update-loading= "isLoadingActive = $event"/>
-    <DailyPrices :pricesData="dailyPrices" :ordersData="orders"/>
+    <FilterBar @update-prices="updatePrices"
+                @update-orders="updateOrders"
+                @update-loading= "isLoadingActive = $event"/>
+
+    <Transition name="fade" @after-enter="isLoadingActive = false">
+      <component v-if="isDailyPricesSelected !== null"
+                :is="isDailyPricesSelected ? DailyPrices : Orders"
+                :pricesData="dailyPrices"
+                :ordersData="orders" />
+    </Transition>
+    <!-- <DailyPrices :pricesData="dailyPrices"
+                  :ordersData="orders"
+                  v-if = "isDailyPricesSelected"/>
+    <Orders :ordersData="orders" v-else /> -->
+
     <UploadFiles />
 </template>
 
