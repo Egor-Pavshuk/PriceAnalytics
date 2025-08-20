@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using PriceAnalytics.Core.Enums;
 using PriceAnalytics.Core.Interfaces;
-using System.Linq;
 
 namespace PriceAnalytics.Controllers
 {
@@ -20,7 +19,10 @@ namespace PriceAnalytics.Controllers
         public async Task<IActionResult> UploadOrderFile(IFormFile file)
         {
             IActionResult result = BadRequest("There is no file or file is incorrect!");
-
+#if TEST
+            Thread.Sleep(4000);
+            return Ok("Order");
+#else
             if (file != null || file?.Length == 0)
             {
                 try
@@ -42,13 +44,17 @@ namespace PriceAnalytics.Controllers
             }
 
             return result;
+#endif
         }
 
         [HttpPost("upload/prices")]
         public async Task<IActionResult> UploadPricesFile(IFormFile file)
         {
             IActionResult result = BadRequest("There is no file or file is incorrect!");
-
+#if TEST
+            Thread.Sleep(4000);
+            return Ok("Prices");
+#else
             if (file != null || file?.Length == 0)
             {
                 try
@@ -70,6 +76,7 @@ namespace PriceAnalytics.Controllers
             }
 
             return result;
+#endif
         }
     }
 }

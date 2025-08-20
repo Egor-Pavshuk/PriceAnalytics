@@ -46,6 +46,8 @@ pnpm-debug.log*
 *.db-journal
 *.sqlite
 *.sqlite3
+*.db-wal
+*.db-shm
 
 # Если хочешь быть точным (дополнительно к верхнему варианту):
 # PriceAnalytics/PriceAnalytics/app.db

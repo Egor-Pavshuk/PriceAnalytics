@@ -9,5 +9,6 @@ namespace PriceAnalytics.Core.DbModels
         [Required]
         public DateOnly Date { get; set; }
         public List<RowData> Rows { get; set; } = [];
+        public string ApplicationType { get; set; } = string.Empty;
     }
 }

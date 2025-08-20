@@ -1,12 +1,13 @@
 <script setup>
 import { ref } from 'vue';
 
-const selectedMode = ref('singleMode')
+const singleMode = 'singleMode';
+const selectedMode = ref(singleMode)
 const selectedDate = ref(formatDate(new Date()))
 const selectedStartDate = ref(formatDate(new Date()))
 const selectedEndDate = ref(formatDate(new Date()))
 
-const emitMethods = defineEmits(['update-prices', 'update-orders']);
+const emitMethods = defineEmits(['update-prices', 'update-orders', 'update-loading']);
 
 singleDateChanged();
 
@@ -17,44 +18,52 @@ function formatDate(date)
 
 async function singleDateChanged()
 {
+  emitMethods('update-loading', false);
+  emitMethods('update-loading', true);
+
   const pricesResponse = await fetch("https://localhost:7260/api/filters/prices/by-single-date?date=" + selectedDate.value,
     {
       method : 'GET'
     }
-  );
+  ).catch(() => { emitMethods('update-loading', false) });
 
     const ordersResponse = await fetch("https://localhost:7260/api/filters/orders/by-single-date?date=" + selectedDate.value,
     {
       method : 'GET'
     }
-  );
+  ).catch(() => { emitMethods('update-loading', false) });
 
   var pricesData = await pricesResponse.json();
   var ordersData = await ordersResponse.json();
 
   emitMethods('update-orders', ordersData);
   emitMethods('update-prices', pricesData);
+  emitMethods('update-loading', false);
 }
 
 async function rangeDateChanged()
 {
+  emitMethods('update-loading', false);
+  emitMethods('update-loading', true);
+
   const pricesResponse = await fetch("https://localhost:7260/api/filters/prices/by-date-range?startDate=" + selectedStartDate.value + "&endDate=" + selectedEndDate.value,
     {
       method : 'GET'
     }
-  );
+  ).catch(() => { emitMethods('update-loading', false) });
 
   const ordersResponse = await fetch("https://localhost:7260/api/filters/orders/by-date-range?startDate=" + selectedStartDate.value + "&endDate=" + selectedEndDate.value,
     {
       method : 'GET'
     }
-  );
+  ).catch(() => { emitMethods('update-loading', false) });
 
   var pricesData = await pricesResponse.json();
   var ordersData = await ordersResponse.json();
 
   emitMethods('update-orders', ordersData);
   emitMethods('update-prices', pricesData);
+  emitMethods('update-loading', false);
 }
 
 async function startDateChanged()
@@ -77,6 +86,17 @@ async function endDateChanged()
   await rangeDateChanged();
 }
 
+async function modeChanged() {
+  if(selectedMode.value === singleMode)
+  {
+    await singleDateChanged();
+  }
+  else
+  {
+    await rangeDateChanged();
+  }
+}
+
 </script>
 
 <template>
@@ -85,11 +105,11 @@ async function endDateChanged()
       <h3 class="filter-title">Choose date mode</h3>
       <div class="radio-group">
         <label class="radio-option">
-          <input type="radio" value="singleMode" v-model="selectedMode" />
+          <input type="radio" value="singleMode" v-model="selectedMode" @change="modeChanged"/>
           Single date mode
         </label>
         <label class="radio-option">
-          <input type="radio" value="rangeMode" v-model="selectedMode" />
+          <input type="radio" value="rangeMode" v-model="selectedMode" @change="modeChanged"/>
           Range date mode
         </label>
       </div>
@@ -190,6 +210,10 @@ input[type="date"]
   display: flex;
   align-items: center;
   gap: 20px;
+}
+
+input[type="radio"] {
+  accent-color: #5783b1;
 }
 
 </style>

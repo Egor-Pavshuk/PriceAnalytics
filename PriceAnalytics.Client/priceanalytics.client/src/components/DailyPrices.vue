@@ -1,4 +1,5 @@
 <script setup>
+
 const { pricesData, ordersData } = defineProps(
   {
     pricesData: Array,
@@ -9,14 +10,14 @@ const { pricesData, ordersData } = defineProps(
 
   function getMatchingColor(row)
   {
-    const { date, hour, price, offeredVolume } = row;
+    const { date, hour, price, offeredVolume, applicationType } = row;
     var resultColor = 'transparent';
 
     if (ordersData && Array.isArray(ordersData))
     {
       for(const order of ordersData)
       {
-        if(order.date === date)
+        if(order.date === date && order.applicationType === applicationType)
         {
           for(const rowData of order.rows || [])
           {
@@ -58,8 +59,8 @@ const { pricesData, ordersData } = defineProps(
               </tr>
            </thead>
             <tbody>
-              <tr v-for="(row, index) in pricesData" :key="index" :style="{ backgroundColor : getMatchingColor(row) }">
-                <td v-for="(cell, index) in row" :key="index">{{ cell }}</td>
+              <tr v-for="(row, index) in pricesData" :key="index" :style="{ backgroundColor : row.color ? row.color : getMatchingColor(row) }">
+                <td v-for="(value, index) in Object.values(row).slice(0, Object.values(row).length - 1)">{{ value }}</td>
               </tr>
             </tbody>
           </table>
@@ -91,7 +92,7 @@ const { pricesData, ordersData } = defineProps(
 }
 
 .table-block{
-  width: 100%;
+  width: 95%;
   display: flex;
   align-items: center;
   flex-direction: column;

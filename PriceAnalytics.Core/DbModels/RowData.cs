@@ -14,6 +14,6 @@ namespace PriceAnalytics.Core.DbModels
         [ForeignKey(nameof(SaleApplicationId))]
         public SaleApplication SaleApplication { get; set; } = null!;
 
-        public List<HourData> Hours { get; set; } = new();
+        public List<HourData> Hours { get; set; } = [];
     }
 }
