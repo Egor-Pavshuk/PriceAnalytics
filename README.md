@@ -11,7 +11,7 @@ You can also filter the data by a specific date or a selected date range.
 - **ASP.NET Web API** — backend framework
 - **Entity Framework Core** — data access layer
 - **SQLite** — database
-- **Vue.js** — frontend fraimework
+- **Vue.js** — frontend framework
 - **JavaScript / HTML / CSS** — basic frontend
 
 ## Roadmap / Future Plans
